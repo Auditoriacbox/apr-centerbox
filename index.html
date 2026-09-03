@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Preliminar de Risco (APR)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<form id="apr-form-element">
+<div class="container" id="apr-form">
+
+    <!-- Cabeçalho -->
+    <div class="header">
+        <div class="logo-placeholder">
+            <img src="Objeto Inteligente de Vetor.png" alt="Logo Grupo Centerbox">
+        </div>
+        <h1 class="title">Análise Preliminar de Risco (APR)</h1>
+    </div>
+
+    <!-- Dados Cabeçalho -->
+    <div class="form-grid">
+        <div class="form-group">
+   		 <label>Solicitante:</label>
+  	         <button type="button" id="btn-Solicitante" class="solicitante-selector">
+      			  <span id="Solicitante-selecionado">Selecione o Solicitante</span>
+     		          <span class="solicitante-arrow">▼</span>
+   	 </button>
+        </div>
+        <div class="form-group">
+            <label for="atividade">Atividade:</label>
+            <input type="text" id="atividade" name="atividade">
+        </div>
+        <div class="form-group">
+            <label>Local:</label>
+            <div class="local-selector" id="btn-local">
+                <span id="local-selecionado">Selecione o local</span>
+                <span class="local-arrow">▼</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="os">Nº da OS:</label>
+            <input type="text" id="os" name="os">
+        </div>
+        <div class="form-group">
+            <label for="responsavel">Responsável:</label>
+            <input type="text" id="responsavel" name="responsavel">
+        </div>
+        <div class="form-group">
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data">
+        </div>
+        
+        <div class="form-group full-width" id="servicos-container">
+            <label>Serviço a ser executado:</label>
+            <div class="services-group">
+                <label class="checkbox-label"><input type="checkbox" name="servico" value="Eletrico"> Elétrico</label>
+                <label class="checkbox-label"><input type="checkbox" name="servico" value="Civil"> Civil</label>
+                <label class="checkbox-label"><input type="checkbox" name="servico" value="Mecanico"> Mecânico</label>
+                <label class="checkbox-label"><input type="checkbox" name="servico" value="Operacional"> Operacional</label>
+                <label class="checkbox-label"><input type="checkbox" name="servico" id="servico-outro-check" value="Outro"> Outro</label>
+            </div>
+            <div class="other-input-container" id="servico-outro-box">
+                <input type="text" id="servico-outro-input" placeholder="Especifique o outro serviço..." style="width: 100%; margin-top: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. RISCOS IDENTIFICADOS -->
+    <div class="section-header">1. RISCOS IDENTIFICADOS</div>
+    <div class="checkbox-grid" id="riscos-container">
+        <label class="checkbox-item"><input type="checkbox"> 1- Queda de diferença de nível (humana)</label>
+        <label class="checkbox-item"><input type="checkbox"> 2- Atingido por corpo estranho (olhos)</label>
+        <label class="checkbox-item"><input type="checkbox"> 3- Queda de objetos</label>
+        <label class="checkbox-item"><input type="checkbox"> 4- Exposição a temperatura extrema</label>
+        <label class="checkbox-item"><input type="checkbox"> 5- Escorregamento / Tropeço</label>
+        <label class="checkbox-item"><input type="checkbox"> 6- Corte ou perfuração</label>
+        <label class="checkbox-item"><input type="checkbox"> 7- Desmoronamento</label>
+        <label class="checkbox-item"><input type="checkbox"> 8- Choque elétrico</label>
+        <label class="checkbox-item"><input type="checkbox"> 9- Incêndio</label>
+        <label class="checkbox-item"><input type="checkbox"> 10- Ruído excessivo</label>
+        <label class="checkbox-item"><input type="checkbox"> 11- Esforço excessivo</label>
+        <label class="checkbox-item"><input type="checkbox"> 12- Queda de Escada / Poste / UB</label>
+        <label class="checkbox-item"><input type="checkbox"> 13- Explosão</label>
+        <label class="checkbox-item"><input type="checkbox"> 14- Condições climáticas adversas</label>
+        <label class="checkbox-item"><input type="checkbox"> 15- Animais peçonhentos / Insetos</label>
+        <label class="checkbox-item"><input type="checkbox"> 16- Veículos / Transporte de Passageiro</label>
+        <label class="checkbox-item"><input type="checkbox"> 17- Preso entre</label>
+        <label class="checkbox-item"><input type="checkbox"> 18- Ferramentas danificadas e/ou vencidas</label>
+        <label class="checkbox-item"><input type="checkbox"> 19- Equip. danificados ou vencidos</label>
+        <label class="checkbox-item"><input type="checkbox"> 20- Máquinas (partes móveis, fiações, etc)</label>
+        <label class="checkbox-item"><input type="checkbox"> 21- Piso escorregadio</label>
+        <label class="checkbox-item"><input type="checkbox"> 22- Queda do mesmo nível</label>
+        <label class="checkbox-item"><input type="checkbox"> 23- Vazamento de gases e/ou vapores</label>
+        <label class="checkbox-item"><input type="checkbox"> 24- Queimadura</label>
+        <label class="checkbox-item"><input type="checkbox"> 25- Intoxicação / Asfixia</label>
+        <label class="checkbox-item"><input type="checkbox"> 26- Poeiras e fumos metálicos</label>
+        <label class="checkbox-item"><input type="checkbox"> 27- Fatores psíquicos sociais</label>
+        <label class="checkbox-item"><input type="checkbox" id="riscos-outro-check"> 28- Outros</label>
+        
+        <div class="other-input-container" id="riscos-outro-box">
+            <textarea id="riscos-outro-input" placeholder="Descreva os outros riscos identificados..."></textarea>
+        </div>
+    </div>
+
+    <!-- 2. RECOMENDAÇÕES DE SEGURANÇA -->
+    <div class="section-header">2. RECOMENDAÇÕES DE SEGURANÇA</div>
+    <div class="checkbox-grid" id="recomendacoes-container">
+        <label class="checkbox-item"><input type="checkbox"> 1- Usar cinto de segurança tipo paraquedista</label>
+        <label class="checkbox-item"><input type="checkbox"> 2- Montar andaimes bem travados e forrados</label>
+        <label class="checkbox-item"><input type="checkbox"> 3- Sinalizar a área e/ou isolar</label>
+        <label class="checkbox-item"><input type="checkbox"> 4- Usar óculos de segurança</label>
+        <label class="checkbox-item"><input type="checkbox"> 5- Verificar condições de uso e segurança da escada</label>
+        <label class="checkbox-item"><input type="checkbox"> 6- Não permanecer embaixo de carga suspensa</label>
+        <label class="checkbox-item"><input type="checkbox"> 7- Verificar condições das cordas, cabos e fitas</label>
+        <label class="checkbox-item"><input type="checkbox"> 8- Utilizar meios de comunicação (rádio, celular)</label>
+        <label class="checkbox-item"><input type="checkbox"> 9- Respeitar sinalização sonora (alarme/sirene)</label>
+        <label class="checkbox-item"><input type="checkbox"> 10- Resfriar equipamentos e/ou instalações</label>
+        <label class="checkbox-item"><input type="checkbox"> 11- Verificar corrimão e guarda-corpo</label>
+        <label class="checkbox-item"><input type="checkbox"> 12- Verificar estado de uso dos EPI's</label>
+        <label class="checkbox-item"><input type="checkbox"> 13- Usar talabarte duplo</label>
+        <label class="checkbox-item"><input type="checkbox"> 14- Verificar atmosfera inflamável</label>
+        <label class="checkbox-item"><input type="checkbox"> 15- Usar travaquedas retrátil</label>
+        <label class="checkbox-item"><input type="checkbox"> 16- Verificar aterramento de máquinas/equip.</label>
+        <label class="checkbox-item"><input type="checkbox"> 17- Guiar com direção defensiva</label>
+        <label class="checkbox-item"><input type="checkbox"> 18- Bloquear e etiquetar equip./instalações</label>
+        <label class="checkbox-item"><input type="checkbox"> 19- Realizar teste de tensão nas máquinas</label>
+        <label class="checkbox-item"><input type="checkbox"> 20- Verificar as proteções das máquinas</label>
+        <label class="checkbox-item"><input type="checkbox"> 21- Usar extintor / hidrantes se necessário</label>
+        <label class="checkbox-item"><input type="checkbox"> 22- Verificar ferramentas/componentes elétricos</label>
+        <label class="checkbox-item"><input type="checkbox"> 23- Usar protetor auricular</label>
+        <label class="checkbox-item"><input type="checkbox"> 24- Não levantar objetos acima do limite</label>
+        <label class="checkbox-item"><input type="checkbox"> 25- Obedecer aos padrões operacionais POP</label>
+        <label class="checkbox-item"><input type="checkbox"> 26- Respeitar as normas de segurança</label>
+        <label class="checkbox-item"><input type="checkbox"> 27- Verificar fixação/condições de tábuas</label>
+        <label class="checkbox-item"><input type="checkbox"> 28- Verificar risco de vazamento/derramamento</label>
+        <label class="checkbox-item"><input type="checkbox"> 29- Respeitar sinalização</label>
+        <label class="checkbox-item"><input type="checkbox"> 30- Utilizar meios de comunicação disponíveis</label>
+        <label class="checkbox-item"><input type="checkbox"> 31- Usar calçado adequado</label>
+        <label class="checkbox-item"><input type="checkbox"> 32- Usar capacete (com jugular para altura)</label>
+        <label class="checkbox-item"><input type="checkbox"> 33- Usar protetor facial</label>
+        <label class="checkbox-item"><input type="checkbox"> 34- Usar avental (couro ou PVC)</label>
+        <label class="checkbox-item"><input type="checkbox"> 35- Usar máscara e/ou respirador autônomo</label>
+        <label class="checkbox-item"><input type="checkbox"> 36- Conferir cabos e correntes suspensos</label>
+        <label class="checkbox-item"><input type="checkbox"> 37- Verificar as condições ambientais</label>
+        <label class="checkbox-item"><input type="checkbox"> 38- Não transportar material nas mãos</label>
+        <label class="checkbox-item"><input type="checkbox"> 39- Verificar dispositivos de segurança</label>
+        <label class="checkbox-item"><input type="checkbox"> 40- Instalar linha de vida com trava-quedas</label>
+        <label class="checkbox-item"><input type="checkbox"> 41- Usar luva de segurança</label>
+        <label class="checkbox-item"><input type="checkbox"> 42- Raquetear tubulação e/ou conexões</label>
+        <label class="checkbox-item"><input type="checkbox"> 44- Purgar / inerteizar / despressurizar</label>
+        <label class="checkbox-item"><input type="checkbox"> 45- Ajustar braçadeiras das mangueiras</label>
+        <label class="checkbox-item"><input type="checkbox"> 46- Desligar/desenergizar equipamentos</label>
+        <label class="checkbox-item"><input type="checkbox"> 47- Utilizar bolsa e corda de serviço</label>
+        <label class="checkbox-item"><input type="checkbox"> 48- Realizar pontos de ancoragem e backup</label>
+        <label class="checkbox-item"><input type="checkbox" id="recomendacoes-outro-check"> 49- Outros</label>
+
+        <div class="other-input-container" id="recomendacoes-outro-box">
+            <textarea id="recomendacoes-outro-input" placeholder="Descreva as outras recomendações de segurança..."></textarea>
+        </div>
+    </div>
+
+    <!-- 3. COLABORADORES ENVOLVIDOS -->
+    <div class="section-header">3. COLABORADORES ENVOLVIDOS NA ATIVIDADE</div>
+
+    <div class="collaborators-container" id="collaborators-container">
+        <div class="collaborator-card" data-collaborator="1">
+            <div class="collaborator-header">
+                <strong>Colaborador 01</strong>
+            </div>
+
+            <div class="form-group">
+                <label>Nome completo:</label>
+                <input type="text" class="collaborator-name" placeholder="Digite o nome completo">
+            </div>
+
+            <div class="signature-container">
+                <label>Assinatura:</label>
+                <p style="font-size: 13px; color: #666; margin-bottom: 8px;">
+                    Assine abaixo usando o dedo (mobile) ou o mouse (desktop):
+                </p>
+                <canvas class="signature-pad" width="500" height="150"></canvas>
+                <div class="canvas-buttons">
+                    <button class="btn btn-clear clear-signature" type="button">
+                        Limpar Assinatura
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" class="btn remove-collaborator" style="display: none;">
+                Remover colaborador
+            </button>
+        </div>
+    </div>
+
+    <!-- ADICIONAR COLABORADOR -->
+    <div class="add-collaborator-container">
+        <button type="button" class="btn btn-add-collaborator" id="btn-add-collaborator">
+            + Adicionar colaborador
+        </button>
+    </div>
+
+    <!-- BOTÃO GERAR PDF -->
+    <button class="btn btn-submit" type="button" id="btn-submit">
+        Finalizar e Gerar PDF
+    </button>
+
+</div>
+</form>
+
+<!-- JANELA FLUTUANTE DE LOCAL -->
+<div class="local-modal" id="local-modal">
+    <div class="local-modal-content">
+        <div class="local-modal-header">
+            <h3>Selecione o local</h3>
+            <button type="button" id="fechar-local">×</button>
+        </div>
+        <div class="local-options">
+            <button type="button" class="local-option" data-local="LOJA">LOJA</button>
+            <button type="button" class="local-option" data-local="DEPOSITO">DEPOSITO</button>
+            <button type="button" class="local-option" data-local="FLV">FLV</button>
+            <button type="button" class="local-option" data-local="FRIGORIFICO">FRIGORIFICO</button>
+            <button type="button" class="local-option" data-local="FRIOS">FRIOS</button>
+            <button type="button" class="local-option" data-local="PADARIA">PADARIA</button>
+            <button type="button" class="local-option" data-local="REFEITORIO">REFEITORIO</button>
+            <button type="button" class="local-option" data-local="AREA EXTERNA">AREA EXTERNA</button>
+        </div>
+    </div>
+</div>
+
+<!-- JANELA FLUTUANTE DE SOLICITANTE -->
+<div class="local-modal" id="solicitante-modal">
+    <div class="local-modal-content">
+        <div class="local-modal-header">
+            <h3>Selecione o Solicitante</h3>
+            <button type="button" id="fechar-solicitante">×</button>
+        </div>
+        <div class="local-options">
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 01 - GENIBAU">FILIAL 01 - GENIBAU</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 02 - PQ SÃO JOSE">FILIAL 02 - PQ SÃO JOSE</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 03 - JOAO XXIII">FILIAL 03 - JOAO XXIII</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 04 - JARDIM IRCEMA">FILIAL 04 - JARDIM IRCEMA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 05 - SANTOS DUMONT">FILIAL 05 - SANTOS DUMONT</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 06 - MESSEJANA I">FILIAL 06 - MESSEJANA I</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 07 - PARQUELANDIA">FILIAL 07 - PARQUELANDIA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 08 - JOSE BASTOS">FILIAL 08 - JOSE BASTOS</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 09 - CONCEITO">FILIAL 09 - CONCEITO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 10 - CORONEL CARVALHO">FILIAL 10 - CORONEL CARVALHO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 11 - EXPEDICIONARIO">FILIAL 11 - EXPEDICIONARIO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 13 - CAUCAIA">FILIAL 13 - CAUCAIA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 14 - BARRA II">FILIAL 14 - BARRA II</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 15 - MESSEJANA II">FILIAL 15 - MESSEJANA II</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 16 - PQ DEL SOL">FILIAL 16 - PQ DEL SOL</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 17 - GRANJA">FILIAL 17 - GRANJA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 18 - CURIO">FILIAL 18 - CURIO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 19 - LAGOA REDONDA">FILIAL 19 - LAGOA REDONDA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 20 - DOM PEDRO">FILIAL 20 - DOM PEDRO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 21 - VALPARAISO">FILIAL 21 - VALPARAISO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 22 - PEDRAS">FILIAL 22 - PEDRAS</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 23 - SANTA MARIA">FILIAL 23 - SANTA MARIA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL ATACAREJO">FILIAL ATACAREJO</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="INDUSTRIA">INDUSTRIA</button>
+	    <button type="button" class="local-option solicitante-option" data-solicitante="COMPLEXO CD">COMPLEXO CD</button>
+        </div>
+    </div>
+</div>
+
+<!-- BIBLIOTECAS PARA GERAÇÃO DO PDF NATIVO -->
+<script src="jspdf.umd.min.js"></script>
+<script src="jspdf.plugin.autotable.min.js"></script>
+<script src="logo.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
