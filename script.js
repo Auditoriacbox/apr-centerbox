@@ -1,9 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================
+    // DATALIST DE COLABORADORES
+    // =========================================================
+    function carregarDatalistColaboradores() {
+        const datalist = document.getElementById('lista-colaboradores');
+        if (!datalist || typeof LISTA_COLABORADORES === 'undefined') return;
+
+        datalist.innerHTML = '';
+        LISTA_COLABORADORES.slice().sort().forEach(nome => {
+            const option = document.createElement('option');
+            option.value = nome;
+            datalist.appendChild(option);
+        });
+    }
+
+    carregarDatalistColaboradores();
+
+    // =========================================================
     // 1. CAMPOS "OUTROS"
     // =========================================================
-
     function toggleOtherInput(checkboxId, containerId) {
         const checkbox = document.getElementById(checkboxId);
         const container = document.getElementById(containerId);
@@ -23,11 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleOtherInput('riscos-outro-check', 'riscos-outro-box');
     toggleOtherInput('recomendacoes-outro-check', 'recomendacoes-outro-box');
 
-
     // =========================================================
-    // 2. SISTEMA DE ASSINATURA (CANVAS)
+    // 2. SISTEMA DE ASSINATURA (CANVAS) - OTIMIZADO
     // =========================================================
-
     function configurarAssinatura(card) {
         const canvas = card.querySelector('.signature-pad');
         const btnClear = card.querySelector('.clear-signature');
@@ -38,14 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ctx) return;
 
         let isDrawing = false;
+        let ajustado = false;
 
         function ajustarCanvas() {
             const rect = canvas.getBoundingClientRect();
             if (rect.width === 0 || rect.height === 0) return;
 
             const dpr = window.devicePixelRatio || 1;
-            
-            // Salva o desenho atual antes de redimensionar
+
+            // Salva o desenho atual caso o canvas precise redimensionar
             const tempImage = canvas.toDataURL();
 
             canvas.width = rect.width * dpr;
@@ -57,13 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.lineJoin = 'round';
             ctx.strokeStyle = '#000000';
 
-            // Restaura o desenho
-            const img = new Image();
-            img.src = tempImage;
-            img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+            if (tempImage !== 'data:,' && tempImage !== 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=') {
+                const img = new Image();
+                img.src = tempImage;
+                img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+            }
+
+            ajustado = true;
         }
 
-        ajustarCanvas();
+        // Executa o primeiro ajuste após a montagem do DOM
+        setTimeout(ajustarCanvas, 100);
 
         function getPosition(event) {
             const rect = canvas.getBoundingClientRect();
@@ -77,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clientY = event.clientY;
             }
 
+            // Calcula o ponto exato relativo ao tamanho em tela CSS (o ctx.scale cuida da escala DPR)
             return {
                 x: clientX - rect.left,
                 y: clientY - rect.top
@@ -84,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function startDrawing(event) {
+            if (!ajustado) ajustarCanvas();
+
             isDrawing = true;
             const pos = getPosition(event);
             ctx.beginPath();
@@ -106,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Eventos de Mouse
+        // Eventos Mouse
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
@@ -117,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.addEventListener('touchmove', draw, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
 
-        // Botão de Limpar Assinatura
+        // Botão de Limpar
         if (btnClear) {
             btnClear.addEventListener('click', function () {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -125,17 +147,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Inicializa assinatura do primeiro card fixo
+    // Inicializa o primeiro colaborador
     const primeiroColaborador = document.querySelector('.collaborator-card');
     if (primeiroColaborador) {
         configurarAssinatura(primeiroColaborador);
     }
 
-
     // =========================================================
-    // 3. CONTROLE E GERENCIAMENTO DE COLABORADORES
+    // 3. CONTROLE DE COLABORADORES
     // =========================================================
-
     const collaboratorsContainer = document.getElementById('collaborators-container');
     const btnAddCollaborator = document.getElementById('btn-add-collaborator');
     let collaboratorCount = 1;
@@ -178,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="form-group">
                     <label>Nome completo:</label>
-                    <input type="text" class="collaborator-name" placeholder="Digite o nome completo">
+                    <input type="text" class="collaborator-name" list="lista-colaboradores" placeholder="Digite ou selecione o nome">
                 </div>
 
                 <div class="signature-container">
@@ -196,11 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             collaboratorsContainer.appendChild(card);
-
-            // Configura a assinatura para o novo card adicionado
             configurarAssinatura(card);
 
-            // Evento para remover colaborador
             const removeButton = card.querySelector('.remove-collaborator');
             if (removeButton) {
                 removeButton.addEventListener('click', function () {
@@ -213,101 +230,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     // =========================================================
-    // 4. MODAL DE SELEÇÃO DE LOCAL E SOLICITANTE
+    // 4. MODAIS DE SELEÇÃO (LOCAL E SOLICITANTE)
     // =========================================================
+    function gerenciarModal(btnId, modalId, fecharId, targetTextId, optionClass, dataAttr) {
+        const btn = document.getElementById(btnId);
+        const modal = document.getElementById(modalId);
+        const fechar = document.getElementById(fecharId);
+        const targetText = document.getElementById(targetTextId);
+        const opcoes = document.querySelectorAll(optionClass);
 
-    // --- MODAL DE LOCAL ---
-    const btnLocal = document.getElementById('btn-local');
-    const modalLocal = document.getElementById('local-modal');
-    const fecharLocal = document.getElementById('fechar-local');
-    const localSelecionado = document.getElementById('local-selecionado');
-    const opcoesLocal = document.querySelectorAll('#local-modal .local-option');
+        if (btn && modal) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            });
+        }
 
-    if (btnLocal && modalLocal) {
-        btnLocal.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalLocal.style.display = 'flex';
+        if (fechar && modal) {
+            fechar.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'none';
+            });
+        }
+
+        opcoes.forEach((opcao) => {
+            opcao.addEventListener('click', function () {
+                const valor = this.dataset[dataAttr];
+                if (targetText) targetText.textContent = valor;
+                if (modal) modal.style.display = 'none';
+            });
         });
+
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.style.display = 'none';
+            });
+        }
     }
 
-    if (fecharLocal && modalLocal) {
-        fecharLocal.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalLocal.style.display = 'none';
-        });
-    }
-
-    opcoesLocal.forEach((opcao) => {
-        opcao.addEventListener('click', function () {
-            const local = this.dataset.local;
-            if (localSelecionado) localSelecionado.textContent = local;
-            if (modalLocal) modalLocal.style.display = 'none';
-        });
-    });
-
-    if (modalLocal) {
-        modalLocal.addEventListener('click', (e) => {
-            if (e.target === modalLocal) {
-                modalLocal.style.display = 'none';
-            }
-        });
-    }
-
-    // --- MODAL DE SOLICITANTE ---
-    const btnSolicitante = document.getElementById('btn-Solicitante');
-    const modalSolicitante = document.getElementById('solicitante-modal');
-    const fecharSolicitante = document.getElementById('fechar-solicitante');
-    const solicitanteSelecionado = document.getElementById('Solicitante-selecionado');
-    const opcoesSolicitante = document.querySelectorAll('.solicitante-option');
-
-    if (btnSolicitante && modalSolicitante) {
-        btnSolicitante.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalSolicitante.style.display = 'flex';
-        });
-    }
-
-    if (fecharSolicitante && modalSolicitante) {
-        fecharSolicitante.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalSolicitante.style.display = 'none';
-        });
-    }
-
-    opcoesSolicitante.forEach((opcao) => {
-        opcao.addEventListener('click', function () {
-            const solicitante = this.dataset.solicitante;
-            if (solicitanteSelecionado) solicitanteSelecionado.textContent = solicitante;
-            if (modalSolicitante) modalSolicitante.style.display = 'none';
-        });
-    });
-
-    if (modalSolicitante) {
-        modalSolicitante.addEventListener('click', (e) => {
-            if (e.target === modalSolicitante) {
-                modalSolicitante.style.display = 'none';
-            }
-        });
-    }
-
+    gerenciarModal('btn-local', 'local-modal', 'fechar-local', 'local-selecionado', '#local-modal .local-option', 'local');
+    gerenciarModal('btn-Solicitante', 'solicitante-modal', 'fechar-solicitante', 'Solicitante-selecionado', '.solicitante-option', 'solicitante');
 
     // =========================================================
     // 5. VALIDAÇÕES DO FORMULÁRIO E ASSINATURA
     // =========================================================
-
     function canvasTemAssinatura(canvas) {
         if (!canvas) return false;
         const ctx = canvas.getContext('2d');
         if (!ctx) return false;
 
         const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
         for (let i = 3; i < pixels.length; i += 4) {
             if (pixels[i] !== 0) return true;
         }
-
         return false;
     }
 
@@ -336,15 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
         }
-
         return true;
     }
-
 
     // =========================================================
     // 6. RESETAR FORMULÁRIO
     // =========================================================
-
     function resetForm() {
         const form = document.getElementById('apr-form-element');
         if (form) form.reset();
@@ -373,6 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nome) nome.value = '';
         }
 
+        const localSelecionado = document.getElementById('local-selecionado');
+        const solicitanteSelecionado = document.getElementById('Solicitante-selecionado');
         if (localSelecionado) localSelecionado.textContent = 'Selecione o local';
         if (solicitanteSelecionado) solicitanteSelecionado.textContent = 'Selecione o Solicitante';
 
@@ -380,11 +355,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-
-  // =========================================================
-    // 7. GERAÇÃO DE PDF NATIVO COM JSPDF + AUTOTABLE
     // =========================================================
-
+    // 7. GERAÇÃO DE PDF COM JSPDF + AUTOTABLE
+    // =========================================================
     function generatePDF() {
         if (!validarColaboradores()) return;
 
@@ -400,34 +373,29 @@ document.addEventListener('DOMContentLoaded', () => {
             format: 'a4'
         });
 
-        const verdeGrupo = [0, 100, 50]; // Cor verde institucional (RGB)
+        const verdeGrupo = [0, 100, 50];
         let cursorY = 15;
 
-        // --- VERIFICAÇÃO E INSERÇÃO DO LOGOTIPO ---
+        // Logotipo
         const temLogo = (typeof LOGO_CENTERBOX !== 'undefined' && LOGO_CENTERBOX !== '');
-        
         if (temLogo) {
-            doc.addImage(LOGO_CENTERBOX, 'PNG', 10, 10, 35, 15);
+            doc.addImage(LOGO_CENTERBOX, 'JPEG', 10, 10, 35, 15, undefined, 'FAST');
         }
 
-        // Alinhamento do cabeçalho cobrindo exatamente a largura da página (até X = 200)
         const headerX = temLogo ? 50 : 10;
         const headerWidth = temLogo ? 150 : 190;
 
-        // --- CABEÇALHO ---
+        // Cabeçalho
         doc.setFillColor(...verdeGrupo);
         doc.rect(headerX, cursorY, headerWidth, 12, 'F');
-
         doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(13);
-        
-        const titleX = headerX + (headerWidth / 2);
-        doc.text('ANÁLISE PRELIMINAR DE RISCO - APR', titleX, cursorY + 8, { align: 'center' });
+        doc.text('ANÁLISE PRELIMINAR DE RISCO - APR', headerX + (headerWidth / 2), cursorY + 8, { align: 'center' });
 
         cursorY += 22;
 
-        // --- INFORMAÇÕES GERAIS ---
+        // Informações Gerais
         const solicitante = document.getElementById('Solicitante-selecionado')?.textContent.trim() || 'Não informado';
         const atividade = document.getElementById('atividade')?.value.trim() || 'N/A';
         const localText = document.getElementById('local-selecionado')?.textContent.trim() || 'Não informado';
@@ -440,46 +408,38 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.setFontSize(9);
 
         // Linha 1
-        doc.setFont('helvetica', 'bold'); doc.text(`Solicitante:`, 10, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Solicitante:', 10, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(solicitante, 30, cursorY);
-
-        doc.setFont('helvetica', 'bold'); doc.text(`Atividade:`, 80, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Atividade:', 80, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(atividade, 98, cursorY);
-
-        doc.setFont('helvetica', 'bold'); doc.text(`Local:`, 150, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Local:', 150, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(localText, 162, cursorY);
 
-        // --- PRIMEIRA LINHA TRACEJADA ---
         doc.setDrawColor(...verdeGrupo);
         doc.setLineWidth(0.5);
-        doc.setLineDashPattern([2, 1], 0); // Padrão tracejado
+        doc.setLineDashPattern([2, 1], 0);
         doc.line(10, cursorY + 2.5, 200, cursorY + 2.5);
 
         cursorY += 7;
 
         // Linha 2
-        doc.setFont('helvetica', 'bold'); doc.text(`Nº OS:`, 10, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Nº OS:', 10, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(os, 25, cursorY);
-
-        doc.setFont('helvetica', 'bold'); doc.text(`Responsável:`, 80, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Responsável:', 80, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(responsavel, 103, cursorY);
-
-        doc.setFont('helvetica', 'bold'); doc.text(`Data:`, 150, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Data:', 150, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(dataFormatada, 162, cursorY);
 
-        // --- SEGUNDA LINHA TRACEJADA ---
         doc.line(10, cursorY + 2.5, 200, cursorY + 2.5);
-
-        // RESETA O ESTILO DA LINHA PARA SÓLIDO
         doc.setLineDashPattern([], 0);
 
         cursorY += 8;
 
-        // --- EXTRAÇÃO DE CHECKBOXES E OUTROS ---
+        // Extração de seleções
         function getCheckedValues(containerSelector, otherCheckId, otherInputId) {
             const checked = [];
             const items = document.querySelectorAll(`${containerSelector} input[type="checkbox"]:checked`);
-            
+
             items.forEach(item => {
                 if (item.id === otherCheckId) {
                     const otherVal = document.getElementById(otherInputId)?.value.trim();
@@ -497,10 +457,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const riscos = getCheckedValues('#riscos-container', 'riscos-outro-check', 'riscos-outro-input');
         const recomendacoes = getCheckedValues('#recomendacoes-container', 'recomendacoes-outro-check', 'recomendacoes-outro-input');
 
-        // --- TABELA NATIVA ---
+        // Tabela de itens
         doc.autoTable({
             startY: cursorY,
-            margin: { left: 10, right: 10 }, // Garante que a tabela tenha exatamente 190mm de largura (de 10 a 200)
+            margin: { left: 10, right: 10 },
             head: [['Categoria', 'Detalhamento dos Itens Selecionados']],
             body: [
                 ['Serviços / Atividades', servicos],
@@ -515,16 +475,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cursorY = doc.lastAutoTable.finalY + 8;
 
-        // --- SEÇÃO DE COLABORADORES E ASSINATURAS ---
+        // Seção de Colaboradores
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(10);
         doc.setTextColor(...verdeGrupo);
         doc.text('3. REGISTRO DE COLABORADORES E ASSINATURAS', 10, cursorY);
-        
+
         cursorY += 4;
 
         const cards = document.querySelectorAll('.collaborator-card');
-
         cards.forEach((card, index) => {
             const nomeInput = card.querySelector('.collaborator-name');
             const nome = nomeInput ? nomeInput.value.trim() : `Colaborador ${index + 1}`;
@@ -543,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
             doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
             doc.text(`Colaborador ${String(index + 1).padStart(2, '0')}:`, 14, cursorY + 13, { baseline: 'middle' });
-            
+
             doc.setFont('helvetica', 'normal');
             doc.text(nome, 45, cursorY + 13, { baseline: 'middle' });
 
@@ -555,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cursorY += 30;
         });
 
-        const fileName = `APR_Grupo_Centerbox_${new Date().toISOString().slice(0,10)}.pdf`;
+        const fileName = `APR_Grupo_Centerbox_${new Date().toISOString().slice(0, 10)}.pdf`;
         doc.save(fileName);
 
         resetForm();
@@ -564,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================
     // 8. EVENTOS DE ENVIO E INICIALIZAÇÃO
     // =========================================================
-
     const btnSubmit = document.getElementById('btn-submit');
     if (btnSubmit) {
         btnSubmit.addEventListener('click', (e) => {

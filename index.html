@@ -22,11 +22,11 @@
     <!-- Dados Cabeçalho -->
     <div class="form-grid">
         <div class="form-group">
-   		 <label>Solicitante:</label>
-  	         <button type="button" id="btn-Solicitante" class="solicitante-selector">
-      			  <span id="Solicitante-selecionado">Selecione o Solicitante</span>
-     		          <span class="solicitante-arrow">▼</span>
-   	 </button>
+            <label>Solicitante:</label>
+            <button type="button" id="btn-Solicitante" class="solicitante-selector">
+                <span id="Solicitante-selecionado">Selecione o Solicitante</span>
+                <span class="solicitante-arrow">▼</span>
+            </button>
         </div>
         <div class="form-group">
             <label for="atividade">Atividade:</label>
@@ -172,7 +172,8 @@
 
             <div class="form-group">
                 <label>Nome completo:</label>
-                <input type="text" class="collaborator-name" placeholder="Digite o nome completo">
+                <!-- Adicionado o atributo list="lista-colaboradores" -->
+                <input type="text" class="collaborator-name" list="lista-colaboradores" placeholder="Digite o nome completo">
             </div>
 
             <div class="signature-container">
@@ -240,36 +241,40 @@
             <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 01 - GENIBAU">FILIAL 01 - GENIBAU</button>
             <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 02 - PQ SÃO JOSE">FILIAL 02 - PQ SÃO JOSE</button>
             <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 03 - JOAO XXIII">FILIAL 03 - JOAO XXIII</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 04 - JARDIM IRCEMA">FILIAL 04 - JARDIM IRCEMA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 04 - JARDIM IRCEMA">FILIAL 04 - JARDIM IRCEMA</button>
             <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 05 - SANTOS DUMONT">FILIAL 05 - SANTOS DUMONT</button>
             <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 06 - MESSEJANA I">FILIAL 06 - MESSEJANA I</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 07 - PARQUELANDIA">FILIAL 07 - PARQUELANDIA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 08 - JOSE BASTOS">FILIAL 08 - JOSE BASTOS</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 09 - CONCEITO">FILIAL 09 - CONCEITO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 10 - CORONEL CARVALHO">FILIAL 10 - CORONEL CARVALHO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 11 - EXPEDICIONARIO">FILIAL 11 - EXPEDICIONARIO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 13 - CAUCAIA">FILIAL 13 - CAUCAIA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 14 - BARRA II">FILIAL 14 - BARRA II</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 15 - MESSEJANA II">FILIAL 15 - MESSEJANA II</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 16 - PQ DEL SOL">FILIAL 16 - PQ DEL SOL</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 17 - GRANJA">FILIAL 17 - GRANJA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 18 - CURIO">FILIAL 18 - CURIO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 19 - LAGOA REDONDA">FILIAL 19 - LAGOA REDONDA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 20 - DOM PEDRO">FILIAL 20 - DOM PEDRO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 21 - VALPARAISO">FILIAL 21 - VALPARAISO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 22 - PEDRAS">FILIAL 22 - PEDRAS</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 23 - SANTA MARIA">FILIAL 23 - SANTA MARIA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL ATACAREJO">FILIAL ATACAREJO</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="INDUSTRIA">INDUSTRIA</button>
-	    <button type="button" class="local-option solicitante-option" data-solicitante="COMPLEXO CD">COMPLEXO CD</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 07 - PARQUELANDIA">FILIAL 07 - PARQUELANDIA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 08 - JOSE BASTOS">FILIAL 08 - JOSE BASTOS</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 09 - CONCEITO">FILIAL 09 - CONCEITO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 10 - CORONEL CARVALHO">FILIAL 10 - CORONEL CARVALHO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 11 - EXPEDICIONARIO">FILIAL 11 - EXPEDICIONARIO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 13 - CAUCAIA">FILIAL 13 - CAUCAIA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 14 - BARRA II">FILIAL 14 - BARRA II</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 15 - MESSEJANA II">FILIAL 15 - MESSEJANA II</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 16 - PQ DEL SOL">FILIAL 16 - PQ DEL SOL</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 17 - GRANJA">FILIAL 17 - GRANJA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 18 - CURIO">FILIAL 18 - CURIO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 19 - LAGOA REDONDA">FILIAL 19 - LAGOA REDONDA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 20 - DOM PEDRO">FILIAL 20 - DOM PEDRO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 21 - VALPARAISO">FILIAL 21 - VALPARAISO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 22 - PEDRAS">FILIAL 22 - PEDRAS</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL 23 - SANTA MARIA">FILIAL 23 - SANTA MARIA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="FILIAL ATACAREJO">FILIAL ATACAREJO</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="INDUSTRIA">INDUSTRIA</button>
+            <button type="button" class="local-option solicitante-option" data-solicitante="COMPLEXO CD">COMPLEXO CD</button>
         </div>
     </div>
 </div>
 
-<!-- BIBLIOTECAS PARA GERAÇÃO DO PDF NATIVO -->
+<!-- ELEMENTO PARA SUGESTÕES DE COLABORADORES -->
+<datalist id="lista-colaboradores"></datalist>
+
+<!-- CARREGAMENTO DE SCRIPTS NA ORDEM CORRETA -->
 <script src="jspdf.umd.min.js"></script>
 <script src="jspdf.plugin.autotable.min.js"></script>
 <script src="logo.js"></script>
+<script src="colaboradores.js"></script>
 <script src="script.js"></script>
 
 </body>
