@@ -417,3 +417,19 @@ canvas.signature-pad {
     page-break-after: avoid !important;
     break-after: avoid !important;
 }
+.dates-inline-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.date-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-item label {
+    font-size: 13px;
+    margin-bottom: 5px;
+}

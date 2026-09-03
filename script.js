@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleOtherInput('recomendacoes-outro-check', 'recomendacoes-outro-box');
 
     // =========================================================
-    // 2. SISTEMA DE ASSINATURA (CANVAS) - OTIMIZADO
+    // 2. SISTEMA DE ASSINATURA (CANVAS)
     // =========================================================
     function configurarAssinatura(card) {
         const canvas = card.querySelector('.signature-pad');
@@ -59,8 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (rect.width === 0 || rect.height === 0) return;
 
             const dpr = window.devicePixelRatio || 1;
-
-            // Salva o desenho atual caso o canvas precise redimensionar
             const tempImage = canvas.toDataURL();
 
             canvas.width = rect.width * dpr;
@@ -81,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ajustado = true;
         }
 
-        // Executa o primeiro ajuste após a montagem do DOM
         setTimeout(ajustarCanvas, 100);
 
         function getPosition(event) {
@@ -96,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 clientY = event.clientY;
             }
 
-            // Calcula o ponto exato relativo ao tamanho em tela CSS (o ctx.scale cuida da escala DPR)
             return {
                 x: clientX - rect.left,
                 y: clientY - rect.top
@@ -134,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseleave', stopDrawing);
 
-        // Eventos Touch (Mobile)
+        // Eventos Touch
         canvas.addEventListener('touchstart', startDrawing, { passive: false });
         canvas.addEventListener('touchmove', draw, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
@@ -401,17 +397,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const localText = document.getElementById('local-selecionado')?.textContent.trim() || 'Não informado';
         const os = document.getElementById('os')?.value.trim() || 'N/A';
         const responsavel = document.getElementById('responsavel')?.value.trim() || 'N/A';
-        const dataInput = document.getElementById('data')?.value;
-        const dataFormatada = dataInput ? new Date(dataInput + 'T00:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+
+        // TRATAMENTO DAS DUAS DATAS (Início e Término)
+        const inputInicio = document.getElementById('data-inicio')?.value;
+        const inputTermino = document.getElementById('data-termino')?.value;
+
+        const dataInicioFormatada = inputInicio 
+            ? new Date(inputInicio + 'T00:00:00').toLocaleDateString('pt-BR') 
+            : new Date().toLocaleDateString('pt-BR');
+
+        const dataTerminoFormatada = inputTermino 
+            ? new Date(inputTermino + 'T00:00:00').toLocaleDateString('pt-BR') 
+            : dataInicioFormatada;
 
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(9);
 
         // Linha 1
         doc.setFont('helvetica', 'bold'); doc.text('Solicitante:', 10, cursorY);
-        doc.setFont('helvetica', 'normal'); doc.text(solicitante, 30, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(solicitante, 28, cursorY);
         doc.setFont('helvetica', 'bold'); doc.text('Atividade:', 80, cursorY);
-        doc.setFont('helvetica', 'normal'); doc.text(atividade, 98, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(atividade, 96, cursorY);
         doc.setFont('helvetica', 'bold'); doc.text('Local:', 150, cursorY);
         doc.setFont('helvetica', 'normal'); doc.text(localText, 162, cursorY);
 
@@ -422,13 +428,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cursorY += 7;
 
-        // Linha 2
+        // Linha 2 (Exibe Início e Término lado a lado no PDF)
         doc.setFont('helvetica', 'bold'); doc.text('Nº OS:', 10, cursorY);
-        doc.setFont('helvetica', 'normal'); doc.text(os, 25, cursorY);
-        doc.setFont('helvetica', 'bold'); doc.text('Responsável:', 80, cursorY);
-        doc.setFont('helvetica', 'normal'); doc.text(responsavel, 103, cursorY);
-        doc.setFont('helvetica', 'bold'); doc.text('Data:', 150, cursorY);
-        doc.setFont('helvetica', 'normal'); doc.text(dataFormatada, 162, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(os, 22, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Responsável:', 55, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(responsavel, 77, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Início:', 130, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(dataInicioFormatada, 141, cursorY);
+        doc.setFont('helvetica', 'bold'); doc.text('Término:', 165, cursorY);
+        doc.setFont('helvetica', 'normal'); doc.text(dataTerminoFormatada, 179, cursorY);
 
         doc.line(10, cursorY + 2.5, 200, cursorY + 2.5);
         doc.setLineDashPattern([], 0);
@@ -532,5 +540,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     atualizarNumeracao();
-    console.log('Sistema APR carregado corretamente com jsPDF nativo.');
+    console.log('Sistema APR carregado corretamente com suporte a duas datas e validações ativas.');
 });
